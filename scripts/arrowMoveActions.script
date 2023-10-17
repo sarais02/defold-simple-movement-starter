@@ -1,0 +1,3 @@
+function init(self)
+	go.set_position(vmath.vector3(250, 125, 0))
+end
