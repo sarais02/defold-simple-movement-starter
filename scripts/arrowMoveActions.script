@@ -1,3 +1,36 @@
+local cont=0
+local last_time = nil
+go.property("speed", 200)
+
 function init(self)
+	msg.post(".", "acquire_input_focus")
 	go.set_position(vmath.vector3(250, 125, 0))
+	self.direction = vmath.vector3(0, 0, 0)
+end
+
+function update(self, dt)
+	if not last_time then
+		last_time = os.time()
+	end
+	go.set_position(go.get_position() + self.direction * self.speed * dt)
+	self.direction = vmath.vector3(0,0,0)
+
+	local current_time = os.time()
+	local diff = os.difftime(current_time, last_time)
+	cont = cont + 1
+	if diff > 0 then
+		print("Updates per second " ..cont/diff) --updates  
+	end
+end
+
+function on_input (self, action_id, action)
+	if action_id == hash("up") then
+		self.direction.y = 1.0
+	elseif action_id == hash("down") then
+		self.direction.y = -1.0
+	elseif action_id == hash("left") then
+		self.direction.x = -1.0
+	elseif action_id == hash("right") then
+		self.direction.x = 1.0
+	end
 end
